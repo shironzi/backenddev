@@ -27,3 +27,10 @@ exports.getIndex = (req, res, next) => {
       console.log(err);
     });
 };
+
+exports.getProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+  Product.findAll({ where: { id: prodId } })
+    .then(res.render("product-detail"))
+    .catch((err) => console.log(err));
+};
