@@ -77,7 +77,6 @@ exports.postCart = (req, res, next) => {
       if (products.length > 0) {
         product = products[0];
       }
-
       if (product) {
         const oldQuantity = product.cartItem.quantity;
         newQuantity = oldQuantity + 1;
@@ -104,6 +103,9 @@ exports.postCartDeleteProduct = (req, res, next) => {
       return cart.getProducts({ where: { id: prodId } });
     })
     .then(products => {
+      if (products.length === 0) {
+        return res.redirect('/cart');
+      }
       const product = products[0];
       return product.cartItem.destroy();
     })
