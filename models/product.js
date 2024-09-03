@@ -9,7 +9,7 @@ class Product {
     this.price = price;
     this.description = description;
     this.imageUrl = imageUrl;
-    this._id = new mongodb.ObjectId(id);
+    this._id = id ? new mongodb.ObjectId(id) : null;
   }
 
   save() {
@@ -28,7 +28,22 @@ class Product {
         return result; // Return the result to the caller
       })
       .catch((err) => {
+        console.error("Error saving product:", err);
         throw err;
+      });
+  }
+
+  static delete(prodId) {
+    const db = getDb();
+    return db.collection('products')
+      .deleteOne({ _id: new ObjectId(prodId) }) // Use the correct query to delete by _id
+      .then(result => {
+        console.log("Product successfully deleted:", result);
+        return result; // Return the result to the caller
+      })
+      .catch(err => {
+        console.error("Error deleting product:", err);
+        throw err; // Ensure to propagate the error
       });
   }
 
