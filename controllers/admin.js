@@ -14,17 +14,18 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const product = new Product(title, price, description, imageUrl);
+
   product
     .save()
     .then((result) => {
-      // console.log(result);
-      console.log("Created Product");
+      console.log("Inserted Product ID:", result.insertedId); // Log the inserted ID
       res.redirect("/admin/products");
     })
     .catch((err) => {
-      console.log(err);
+      console.error("Error during product creation:", err);
     });
 };
+
 
 // exports.getEditProduct = (req, res, next) => {
 //   const editMode = req.query.edit;
