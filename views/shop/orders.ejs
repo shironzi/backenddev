@@ -20,15 +20,6 @@
                         </li>
                     <% }); %>
                 </ul>
-                <h2>Total:  
-                    <% let total = 0; %>
-                    <% orders.forEach(order => { %>
-                        <% order.products.forEach(p => { %>
-                            <% total += p.product.price * p.quantity %>
-                            <% }) %>
-                    <% }) %>
-                    <%= total %>
-                </h2>
             <% } %>
         </main>
         <%- include('../includes/end.ejs') %>
