@@ -212,6 +212,7 @@ exports.postNewPassword = (req, res, next) => {
     })
     .then((result) => {
       res.redirect("/login");
+      console.log(result);
     })
     .catch((err) => console.log(err));
 };
