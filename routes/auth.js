@@ -16,16 +16,16 @@ router.post(
   [
     check("email")
       .isEmail()
-      .withMessage("Please Enter a valid email.")
-      .custom((value, { req }) => {
-        if (value == "test@test.com") {
-          throw new Error("This email address if forbidden.");
-        }
-        return true;
-      }),
+      .withMessage("Please Enter a valid email."),
     body("password", "Please enter a password with only numbers and text and at least 5 characters")
       .isLength({ min: 5 })
       .isAlphanumeric(),
+    body('confirmPassword', "Password does not match.").custom((value, {req}) => {
+      if(value !== req.body.password){
+        throw new Error('Passwords do not match');
+      }
+      return true;
+    })
   ],
   authController.postSignup
 );
