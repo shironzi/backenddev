@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sendGridTransport = require("nodemailer-sendgrid-transport");
-const { validationResult } = require('express-validator')
+const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 const { error } = require("console");
@@ -48,10 +48,10 @@ exports.getSignup = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  
-  const errors = validationResult(req)
 
-  if(!errors.isEmpty()){
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
     return res.status(422).render("auth/login", {
       path: "/login",
       pageTitle: "Login",
@@ -91,9 +91,9 @@ exports.postSignup = (req, res, next) => {
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
 
-  const errors = validationResult(req)
+  const errors = validationResult(req);
 
-  if(!errors.isEmpty()){
+  if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
       path: "/signup",
       pageTitle: "Signup",
@@ -101,37 +101,28 @@ exports.postSignup = (req, res, next) => {
     });
   }
 
-  User.findOne({ email: email })
-    .then((userDoc) => {
-      if (userDoc) {
-        req.flash("error", "Email Address is already exists");
-        return res.redirect("/signup");
-      }
-
-      return bcrypt
-        .hash(password, 12)
-        .then((hashedPassword) => {
-          const user = new User({
-            email: email,
-            password: hashedPassword,
-            cart: { items: [] },
-          });
-          return user.save();
-        })
-        .then((result) => {
-          res.redirect("/login");
-          return transporter.sendMail({
-            to: email,
-            from: "shop@node-complete.com",
-            subject: "Signup successfully",
-            html: "<h1> You successfully signup </h1>",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const user = new User({
+        email: email,
+        password: hashedPassword,
+        cart: { items: [] },
+      });
+      return user.save();
     })
-    .catch((err) => console.log(err));
+    .then((result) => {
+      res.redirect("/login");
+      return transporter.sendMail({
+        to: email,
+        from: "shop@node-complete.com",
+        subject: "Signup successfully",
+        html: "<h1> You successfully signup </h1>",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postLogout = (req, res, next) => {
