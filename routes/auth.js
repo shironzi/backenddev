@@ -19,10 +19,10 @@ router.post(
       .normalizeEmail(),
     body("password")
       .notEmpty()
+      .trim()
       .isLength({ min: 5 })
       .isAlphanumeric()
-      .withMessage("Password is required")
-      .trim(),
+      .withMessage("Password is required"),
   ],
   authController.postLogin
 );
